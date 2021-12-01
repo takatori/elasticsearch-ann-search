@@ -1,0 +1,5 @@
+transformers==4.5.0
+fugashi==1.1.0
+ipadic==1.0.0
+torch==1.8.0
+elasticsearch==7.15.2
