@@ -1,17 +1,12 @@
 import json
 from re import T
-
-from elasticsearch import Elasticsearch
 import urllib.request
-
 from bert import embedding
-
-client = Elasticsearch()
-
 
 def handle_query():
     query = input("Enter query: ")
 
+    # script queryでdense_vectorを使う場合のクエリ
     # script_query = {
     #     "script_score": {
     #         "query": {"match_all": {}},
@@ -39,7 +34,6 @@ def handle_query():
     }
 
     req = urllib.request.Request(url, json.dumps(es_query).encode(), headers)
-    # print(req.data)
 
     with urllib.request.urlopen(req) as res:
         body = res.read().decode()
