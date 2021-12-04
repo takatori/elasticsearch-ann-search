@@ -4,28 +4,25 @@ from elasticsearch.helpers import bulk
 from bert import embedding
 from joblib import Parallel, delayed
 
-
 client = Elasticsearch()
 INDEX_NAME = "ann_sample"
 
-def index_batch(doc):
-    requests = get_request(doc)
-    print(requests)
+def index_batch(docs):
+    requests = [get_request(doc) for doc in docs]
     bulk(client, requests)
 
-
 def get_request(doc):
-    return [{
+    return {
         "_op_type": "index",
         "_index": INDEX_NAME,
         "text": doc,
         "text_vector": embedding(doc)
-    }]
+    }
 
 
 if __name__ == '__main__':
 
-    BATCH_SIZE = 1000
+    BATCH_SIZE = 100
     docs = []
     count = 0
 
@@ -44,6 +41,17 @@ if __name__ == '__main__':
     for category in category_list:
         for file in glob.glob(f"../data/text/{category}/{category}*"):
             lines = open(file).read().splitlines()
-            print(lines[0])
             text = '\n'.join(lines[3:])
-            index_batch(text)
+
+            docs.append(text)
+            count += 1
+
+            if count % BATCH_SIZE == 0:
+                index_batch(docs)
+                docs = []
+                print(f"Indexed {count} documents.")
+
+        if docs:    
+            index_batch(docs)
+            print(f"Indexed {count} documents.")
+

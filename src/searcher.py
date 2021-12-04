@@ -1,5 +1,4 @@
 import json
-from re import T
 import urllib.request
 from bert import embedding
 
@@ -28,7 +27,7 @@ def handle_query():
         "fields": ["text"]
     }
 
-    url = 'http://127.0.0.1:9200/livedoor/_knn_search'
+    url = 'http://127.0.0.1:9200/ann_sample/_knn_search'
     headers = {
         'Content-Type': 'application/json',
     }
@@ -37,7 +36,7 @@ def handle_query():
 
     with urllib.request.urlopen(req) as res:
         body = res.read().decode()
-        print(body)
+        print(json.dumps(json.loads(body), ensure_ascii=False, indent=2))
 
 
 def run_query_loop():

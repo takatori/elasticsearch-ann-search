@@ -1,10 +1,11 @@
 import torch
 from transformers import BertJapaneseTokenizer, BertModel
 
+print("start loading the model...")
 model_name = 'cl-tohoku/bert-base-japanese-whole-word-masking'
 bert = BertModel.from_pretrained(model_name)
 tokenizer = BertJapaneseTokenizer.from_pretrained(model_name)
-
+print("Model loading is complete !")
 
 def embedding(text):
 
